@@ -69,15 +69,10 @@ export const raceEvents: RaceEvent[] = [
     gpName: "Bahrain Grand Prix",
     countryName: "Bahrain",
     countryFlag: "🇧🇭",
-    date: { qualifying: "Cancelled", race: new Date("2023-7-8 8:00:00Z") },
+    date: { qualifying: "TBD", race: "TBD" },
     circuitName: "Bahrain International Circuit",
     circuitImage:
       "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassettocorsa.vip%2Fwp-content%2Fuploads%2F2020%2F12%2FBAHRAIN-INTERNATIONAL-CIRCUIT.jpg&f=1&nofb=1&ipt=abbc95a10a6bf3afe08f65bef9a9486d932bbd462d64a1875481bdf7e85f2ab8&ipo=images",
-    video: {
-      vod: {
-        qualifying: "w1GUHB9esRnVNdDLCVW2XZOl",
-      },
-    },
   },
   {
     results: {},
