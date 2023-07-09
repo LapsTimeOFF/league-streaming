@@ -124,7 +124,7 @@ const StreamCard: FC<Props> = ({ event, sessionKey, sessionDate }) => {
   }, [data, event, sessionKey]);
 
   return (
-    <Grid item xs={5}>
+    <Grid item xs={10} md={5}>
       <Paper elevation={6}>
         <CardActionArea
           LinkComponent={Link}

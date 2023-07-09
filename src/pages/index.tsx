@@ -1,11 +1,13 @@
 import Head from "next/head";
 import { Inter } from "next/font/google";
-import { Box, Typography, Divider } from "@mui/material";
+import { Box, Typography, Divider, useMediaQuery } from "@mui/material";
 import UpcomingEvents from "@/components/UpcomingEvents";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const smallScreen = useMediaQuery("(max-width:800px)");
+
   return (
     <>
       <Head>
@@ -18,7 +20,7 @@ export default function Home() {
       </Head>
       <Box
         sx={{
-          position: "sticky",
+          position: smallScreen ? undefined : "sticky",
           top: 0,
           backgroundColor: "#121212",
           zIndex: 100,
