@@ -94,7 +94,7 @@ interface PlayListItemList {
 
 const StreamCard: FC<Props> = ({ event, sessionKey, sessionDate }) => {
   const { data } = useSWR<Broadcast>(
-    `https://ott.jstt.me/racingDevelopment/rest/v2/broadcasts/${event.video?.live?.[sessionKey]}`,
+    `https://ott.jstt.me/racing/rest/v2/broadcasts/${event.video?.live?.[sessionKey]}`,
     async (url: string) => {
       if (!event.video?.live?.[sessionKey]) return Promise.resolve(null);
 

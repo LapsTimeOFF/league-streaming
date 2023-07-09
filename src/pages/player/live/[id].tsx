@@ -18,7 +18,7 @@ const LivePlayer = () => {
     responsive: true,
     fluid: true,
     sources: [{
-      src: `https://ott.jstt.me/racingDevelopment/streams/${streamId}/${streamId}.mpd`,
+      src: `https://ott.jstt.me/racing/streams/${streamId}/${streamId}.mpd`,
       type: 'application/dash+xml'
     }]
   };
