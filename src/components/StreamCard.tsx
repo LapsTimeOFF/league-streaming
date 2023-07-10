@@ -123,6 +123,10 @@ const StreamCard: FC<Props> = ({ event, sessionKey, sessionDate }) => {
     );
   }, [data, event, sessionKey]);
 
+  const isLive = data && data.status === BroadcastStatus.BROADCASTING;
+  const hasVOD = event.video?.vod?.[sessionKey] !== undefined;
+  const isDisabled = !isLive && !hasVOD;
+
   return (
     <Grid item xs={10} md={5}>
       <Paper elevation={6}>
@@ -139,7 +143,7 @@ const StreamCard: FC<Props> = ({ event, sessionKey, sessionDate }) => {
               ? `/player/vod/${event.video?.vod?.[sessionKey]}`
               : ``
           }
-          disabled={data ? data.status !== BroadcastStatus.BROADCASTING : true}
+          disabled={isDisabled}
         >
           <CardMedia
             sx={{ height: 240 }}

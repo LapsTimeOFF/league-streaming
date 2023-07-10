@@ -23,12 +23,6 @@ const UpcomingEvents: FC<Props> = ({ font }) => {
       }}
     >
       <Typography
-        variant="h2"
-        sx={{ fontFamily: font, textAlign: "center", mb: 1 }}
-      >
-        Season 1 - F1 Twitter Refugees League
-      </Typography>
-      <Typography
         sx={{
           fontFamily: font,
           textAlign: "center",
@@ -39,11 +33,6 @@ const UpcomingEvents: FC<Props> = ({ font }) => {
       >
         Upcoming Events
       </Typography>
-      <Divider
-        sx={{
-          mt: 1,
-        }}
-      />
       {debug && <JSONTree data={raceEvents} />}
       {raceEvents?.map((event) => (
         <StreamBar key={event.gpName} event={event} />

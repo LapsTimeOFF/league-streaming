@@ -2,6 +2,7 @@ import Head from "next/head";
 import { Inter } from "next/font/google";
 import { Box, Typography, Divider, useMediaQuery } from "@mui/material";
 import UpcomingEvents from "@/components/UpcomingEvents";
+import React from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default function Home() {
           flexDirection: "row",
           display: "flex",
           alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <img
@@ -60,6 +62,15 @@ export default function Home() {
         />
       </Box>
 
+      <Typography
+        variant="h2"
+        sx={{ fontFamily: inter, textAlign: "center", mb: 1 }}
+      >
+        Season 1 - F1 Twitter Refugees League
+      </Typography>
+
+      <Divider/>
+
       <UpcomingEvents font={inter} />
       <Box
         sx={{
@@ -69,6 +80,7 @@ export default function Home() {
           flexDirection: "row",
           display: "flex",
           alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <Typography
@@ -76,7 +88,7 @@ export default function Home() {
             fontFamily: inter,
             ml: 3,
             color: "gray",
-            fontSize: 12,
+            fontSize: 15,
           }}
         >
           Copyright 2023 - F1 Twitter Refugees
