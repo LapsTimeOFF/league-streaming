@@ -19,16 +19,31 @@ const UpcomingEvents: FC<Props> = ({ font }) => {
   return (
     <Box
       sx={{
-        mt: 4,
+        mt: 2,
       }}
     >
       <Typography
         variant="h2"
         sx={{ fontFamily: font, textAlign: "center", mb: 1 }}
       >
+        Season 1 - F1 Twitter Refugees League
+      </Typography>
+      <Typography
+        sx={{
+          fontFamily: font,
+          textAlign: "center",
+          mb: 1,
+          color: "gray",
+          fontSize: 18,
+        }}
+      >
         Upcoming Events
       </Typography>
-      <Divider />
+      <Divider
+        sx={{
+          mt: 1,
+        }}
+      />
       {debug && <JSONTree data={raceEvents} />}
       {raceEvents?.map((event) => (
         <StreamBar key={event.gpName} event={event} />

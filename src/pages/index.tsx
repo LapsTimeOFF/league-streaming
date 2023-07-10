@@ -20,38 +20,68 @@ export default function Home() {
       </Head>
       <Box
         sx={{
-          position: smallScreen ? undefined : "sticky",
+          position: "sticky",
           top: 0,
           backgroundColor: "#121212",
           zIndex: 100,
           mb: 4,
+          flexDirection: "row",
+          display: "flex",
+          alignItems: "center",
         }}
       >
-        <Typography
-          variant="h1"
-          sx={{ textAlign: "center", fontFamily: inter }}
-        >
-          <b>League Streaming Platform</b>
-        </Typography>
-        <Divider
-          sx={{
-            my: 1,
+        <img
+          src="/logo.png"
+          alt="League Streaming Platform"
+          width="100"
+          height="100"
+          style={{
+            marginLeft: 15,
+            marginTop: 15,
+            borderRadius: 30,
+            marginBottom: 15,
           }}
         />
         <Typography
-          variant="h3"
-          sx={{ textAlign: "center", fontFamily: inter }}
+          variant={smallScreen ? "h6" : "h1"}
+          sx={{
+            fontFamily: inter,
+            ml: 2,
+            color: "white",
+          }}
         >
-          <b>Season 1: F1 Twitter Refugees league</b>
+          League Streaming Platform
         </Typography>
         <Divider
           sx={{
+            mt: 2,
             my: 1,
           }}
         />
       </Box>
 
       <UpcomingEvents font={inter} />
+      <Box
+        sx={{
+          bottom: 0,
+          zIndex: 100,
+          mb: 4,
+          flexDirection: "row",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Typography
+          sx={{
+            fontFamily: inter,
+            ml: 3,
+            color: "gray",
+            fontSize: 12,
+          }}
+        >
+          Copyright 2023 - F1 Twitter Refugees
+        </Typography>
+      </Box>
     </>
   );
 }

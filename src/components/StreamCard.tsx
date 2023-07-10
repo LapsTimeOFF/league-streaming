@@ -139,6 +139,7 @@ const StreamCard: FC<Props> = ({ event, sessionKey, sessionDate }) => {
               ? `/player/vod/${event.video?.vod?.[sessionKey]}`
               : ``
           }
+          disabled={data ? data.status !== BroadcastStatus.BROADCASTING : true}
         >
           <CardMedia
             sx={{ height: 240 }}
