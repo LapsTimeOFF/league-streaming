@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Box, Typography, Divider, useMediaQuery } from "@mui/material";
 import UpcomingEvents from "@/components/UpcomingEvents";
 import React from "react";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,7 +33,7 @@ export default function Home() {
           justifyContent: "center",
         }}
       >
-        <img
+        <Image
           src="/logo.png"
           alt="League Streaming Platform"
           width="100"
