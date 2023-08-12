@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import React from "react";
 import Link from "next/link";
-import AdditionalStreamsSection from "@/components/AdditionalStreamsSection";
 
 const LivePlayer = () => {
   const router = useRouter();
@@ -21,7 +20,7 @@ const LivePlayer = () => {
     sources: [
       {
         src: `https://ott.jstt.me/${
-          process.env.NODE_ENV === "production" ? "racing" : "racingDevelopment"
+          process.env.NODE_ENV === "production" ? "racingOBC" : "racingDevelopmentOBC"
         }/streams/${streamId}/${streamId}.mpd`,
         type: "application/dash+xml",
       },
@@ -47,7 +46,6 @@ const LivePlayer = () => {
         Live Player
       </Typography>
       <Player options={videoJsOptions} />
-      <AdditionalStreamsSection id={streamId as string} />
     </Container>
   );
 };
