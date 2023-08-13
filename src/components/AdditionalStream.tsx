@@ -32,7 +32,7 @@ const AdditionalStream: FC<Props> = ({ stream }) => {
             <CardMedia component="img" image={stream.image} alt={stream.name} />
           ) : null}
           <CardContent>
-            <Typography variant="h3">{stream.name}</Typography>
+            <Typography variant="h4">{stream.name}</Typography>
           </CardContent>
         </CardActionArea>
       </Card>

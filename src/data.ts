@@ -67,8 +67,8 @@ export const raceEvents: RaceEvent[] = [
       "This session is for testing purposes, principal systems, including telemetry and broadcasting will be tested, drivers will be driving on the Paul Ricard track. This session **will not** affect the championship. The qualification will have the classic format, but, the race will be aborted after a few laps. Please make sure to always keep an eye on the Discord for any action given by the Race Control.",
     video: {
       live: {
-        qualifying: "test-stream",
-        // qualifying: "league-pre-season-q",
+        // qualifying: "test-stream",
+        qualifying: "league-pre-season-q",
         race: "league-pre-season-r",
       },
     },
@@ -90,6 +90,7 @@ export const raceEvents: RaceEvent[] = [
           name: "felix_458's On Board",
           streamKey: "felix_458-obc",
           environment: "OBC",
+          image: "https://media.formula1.com/image/upload/content/dam/fom-website/manual/2023/Launches2023/AlphaTauriLaunch/0002.jpg.transform/9col/image.jpg"
         },
       ],
     },
