@@ -49,8 +49,7 @@ export type AdditionalStream = {
   environment: "OBC";
 };
 
-// ALL THE DATES ARE TBD FOR THE MOMENT
-// Bahrain Testing, Bahrain, Qatar, China, Japan, Barcelona, Austria, Silverstone, Spa, Monza, COTA, Brazil
+// France Testing, Bahrain, Qatar, China, Japan, Barcelona, Austria, Silverstone, Spa, Monza, COTA, Brazil
 
 export const raceEvents: RaceEvent[] = [
   {
@@ -59,7 +58,7 @@ export const raceEvents: RaceEvent[] = [
     gpName: "Pre-Season Testing",
     countryName: "France",
     countryFlag: "🇫🇷",
-    date: { qualifying: "TBD", race: "TBD" },
+    date: { qualifying: new Date("2023-08-20T17:00:00.000Z"), race: new Date("2023-08-20T17:15:00.000Z") },
     circuitName: "Circuit du Castellet",
     circuitImage:
       "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.bandoltourisme.fr%2Fwp-content%2Fuploads%2F2021%2F05%2FSans-titre-2-1200x675.jpg&f=1&nofb=1&ipt=cdd8ad94b9f8770ffe92d163dfa3a23bc2afe915092893bc9c88af2583dfbbba&ipo=images",
@@ -67,32 +66,10 @@ export const raceEvents: RaceEvent[] = [
       "This session is for testing purposes, principal systems, including telemetry and broadcasting will be tested, drivers will be driving on the Paul Ricard track. This session **will not** affect the championship. The qualification will have the classic format, but, the race will be aborted after a few laps. Please make sure to always keep an eye on the Discord for any action given by the Race Control.",
     video: {
       live: {
-        // qualifying: "test-stream",
         qualifying: "league-pre-season-q",
+        // qualifying: "test-stream",
         race: "league-pre-season-r",
       },
-    },
-    additionalStreams: {
-      live: [
-        {
-          name: "angelscn76's On Board",
-          streamKey: "angelscn76-obc",
-          environment: "OBC",
-          image: "https://media.formula1.com/image/upload/content/dam/fom-website/manual/Misc/2023manual/Pre-season/February/Alpine%202.jpg.transform/9col/image.jpg"
-        },
-        {
-          name: "natgracing's On Board",
-          streamKey: "natgracing-obc",
-          environment: "OBC",
-          image: "https://media.formula1.com/image/upload/content/dam/fom-website/manual/Misc/2023manual/Pre-season/February/MCL60/MCL60-LN4-High-7K.jpg.transform/9col/image.jpg"
-        },
-        {
-          name: "felix_458's On Board",
-          streamKey: "felix_458-obc",
-          environment: "OBC",
-          image: "https://media.formula1.com/image/upload/content/dam/fom-website/manual/2023/Launches2023/AlphaTauriLaunch/0002.jpg.transform/9col/image.jpg"
-        },
-      ],
     },
   },
   {
