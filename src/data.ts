@@ -54,7 +54,7 @@ export type AdditionalStream = {
 export const raceEvents: RaceEvent[] = [
   {
     results: {},
-    done: false,
+    done: true,
     gpName: 'Pre-Season Testing',
     countryName: 'France',
     countryFlag: '🇫🇷',
