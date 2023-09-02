@@ -82,8 +82,8 @@ export const raceEvents: RaceEvent[] = [
     countryName: 'Bahrain',
     countryFlag: '🇧🇭',
     date: {
-      qualifying: new Date('2023-09-03T17:00:00.000Z'),
-      race: new Date('2023-09-03T17:20:00.000Z'),
+      qualifying: new Date('2023-09-02T17:00:00.000Z'),
+      race: new Date('2023-09-02T17:20:00.000Z'),
     },
     circuitName: 'Bahrain International Circuit',
     circuitImage:
