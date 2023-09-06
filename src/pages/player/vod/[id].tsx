@@ -1,10 +1,11 @@
-import Player from "@/components/Player";
-import { Box, Container, IconButton, Typography } from "@mui/material";
-import { useRouter } from "next/router";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React, { use, useEffect, useRef } from "react";
-import Link from "next/link";
-import useSWR from "swr";
+import Player from '@/components/Player';
+import { Box, Container, IconButton, Typography } from '@mui/material';
+import { useRouter } from 'next/router';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import React, { use, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import useSWR from 'swr';
+import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next/types';
 
 interface VOD {
   streamName: string;
@@ -19,33 +20,48 @@ interface VOD {
   type: string;
   previewFilePath: null;
 }
+export const getStaticPaths: GetStaticPaths = async () => {
+  const streams = (await fetch(
+    'https://ott.jstt.me/racing/rest/v2/vods/list/0/100'
+  ).then((res) => res.json())) as VOD[];
 
-const LivePlayer = () => {
-  const router = useRouter();
+  const paths = streams.map((stream) => ({
+    params: { id: stream.vodId },
+  }));
+  return {
+    paths,
+    fallback: false, // false or "blocking"
+  };
+};
+
+export const getStaticProps: GetStaticProps<{
+  id: VOD;
+}> = async (context) => {
+  const vod = (await fetch(
+    `https://ott.jstt.me/racing/rest/v2/vods/${context.params?.id}`
+  ).then((res) => res.json())) as VOD;
+
+  return { props: { id: vod } };
+}; 
+
+export default function Page({
+  id,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const videoPlayer = useRef<null | HTMLVideoElement>(null);
 
-  console.log(router.query);
-
-  const vodId = router.query.id;
-
-  const { data } = useSWR<VOD>(
-    `https://ott.jstt.me/racing/rest/v2/vods/${vodId}`,
-    (url: string) => fetch(url).then((res) => res.json())
-  );
-
   useEffect(() => {
-    console.log(data);
-    if (data) {
-      videoPlayer.current!.src = `https://ott.jstt.me/racing/${data.filePath}`;
+    console.log(id);
+    if (id) {
+      videoPlayer.current!.src = `https://ott.jstt.me/racing/${id.filePath}`;
     }
-  }, [data, vodId]);
+  }, [id]);
 
   return (
     <Container>
       <IconButton aria-label="back" LinkComponent={Link} href="/">
         <ArrowBackIcon
           sx={{
-            color: "white",
+            color: 'white',
             m: 2,
           }}
         />
@@ -53,7 +69,7 @@ const LivePlayer = () => {
       <Typography
         variant="h1"
         sx={{
-          textAlign: "center",
+          textAlign: 'center',
         }}
       >
         VOD Player
@@ -63,11 +79,9 @@ const LivePlayer = () => {
         controls
         autoPlay
         style={{
-          width: "100%",
+          width: '100%',
         }}
       />
     </Container>
   );
 };
-
-export default LivePlayer;
