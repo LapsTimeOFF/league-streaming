@@ -29,14 +29,14 @@ const LivePlayer = () => {
   const vodId = router.query.id;
 
   const { data } = useSWR<VOD>(
-    `https://ott.jstt.me/${process.env.NODE_ENV === "production" ? "racing" : "racingDevelopment"}/rest/v2/vods/${vodId}`,
+    `https://ott.jstt.me/racing/rest/v2/vods/${vodId}`,
     (url: string) => fetch(url).then((res) => res.json())
   );
 
   useEffect(() => {
     console.log(data);
     if (data) {
-      videoPlayer.current!.src = `https://ott.jstt.me/${process.env.NODE_ENV === "production" ? "racing" : "racingDevelopment"}/${data.filePath}`;
+      videoPlayer.current!.src = `https://ott.jstt.me/racing/${data.filePath}`;
     }
   }, [data, vodId]);
 

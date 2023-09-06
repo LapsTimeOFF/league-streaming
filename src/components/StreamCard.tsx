@@ -6,29 +6,28 @@ import {
   Grid,
   Paper,
   Typography,
-} from "@mui/material";
-import React, { FC, useEffect } from "react";
-import { RaceEvent, SessionsName } from "@/data";
-import { FormattedDate } from "react-intl";
-import useSWR from "swr";
-import Link from "next/link";
+} from '@mui/material';
+import React, { FC, useEffect } from 'react';
+import { RaceEvent, SessionsName, VideoObject } from '@/data';
+import { FormattedDate } from 'react-intl';
+import useSWR from 'swr';
+import Link from 'next/link';
 
 type Props = {
   event: RaceEvent;
-  sessionKey: SessionsName;
-  sessionDate: RaceEvent["date"][SessionsName];
+  session: VideoObject;
 };
 
 enum BroadcastStatus {
-  CREATED = "created",
-  BROADCASTING = "broadcasting",
-  FINISHED = "finished",
+  CREATED = 'created',
+  BROADCASTING = 'broadcasting',
+  FINISHED = 'finished',
 }
 
 const sessionsDisplayName: { [key in SessionsName]: string } = {
-  qualifying: "Qualifying",
-  race: "Race",
-  session: "Session",
+  qualifying: 'Qualifying',
+  race: 'Race',
+  session: 'Session',
 };
 
 interface Broadcast {
@@ -92,11 +91,13 @@ interface PlayListItemList {
   type: string;
 }
 
-const StreamCard: FC<Props> = ({ event, sessionKey, sessionDate }) => {
+const StreamCard: FC<Props> = ({ event, session }) => {
   const { data } = useSWR<Broadcast>(
-    `https://ott.jstt.me/${process.env.NODE_ENV === "production" ? "racing" : "racingDevelopment"}/rest/v2/broadcasts/${event.video?.live?.[sessionKey]}`,
+    session.type === 'live'
+      ? `https://ott.jstt.me/racing/rest/v2/broadcasts/${session.vodId}`
+      : null,
     async (url: string) => {
-      if (!event.video?.live?.[sessionKey]) return Promise.resolve(null);
+      if (url === null) return Promise.resolve(null);
 
       const data = await fetch(url).then((res) => res.json());
 
@@ -105,75 +106,55 @@ const StreamCard: FC<Props> = ({ event, sessionKey, sessionDate }) => {
     { refreshInterval: 5000 }
   );
 
-  useEffect(() => {
-    console.log(
-      data,
-      sessionKey,
-      event,
-      event.video?.vod?.[sessionKey],
-      data
-        ? data.status === BroadcastStatus.BROADCASTING
-          ? `/player/live/${data.streamId}`
-          : event.video?.vod?.[sessionKey] !== undefined
-          ? `/player/vod/${event.video?.vod?.[sessionKey]}`
-          : ``
-        : event.video?.vod?.[sessionKey] !== undefined
-        ? `/player/vod/${event.video?.vod?.[sessionKey]}`
-        : ``
-    );
-  }, [data, event, sessionKey]);
-
-  const isLive = data && data.status === BroadcastStatus.BROADCASTING;
-  const hasVOD = event.video?.vod?.[sessionKey] !== undefined;
-  const isDisabled = !isLive && !hasVOD;
-
   return (
-    <Grid item xs={10} md={5}>
+    <Grid item xs={3} md={3} sx={{
+      opacity: data && data.status !== BroadcastStatus.BROADCASTING ? 0.5 : 1,
+    }}>
       <Paper elevation={6}>
         <CardActionArea
           LinkComponent={Link}
           href={
-            data
-              ? data.status === BroadcastStatus.BROADCASTING
-                ? `/player/live/${data.streamId}`
-                : event.video?.vod?.[sessionKey] !== undefined
-                ? `/player/vod/${event.video?.vod?.[sessionKey]}`
-                : ``
-              : event.video?.vod?.[sessionKey] !== undefined
-              ? `/player/vod/${event.video?.vod?.[sessionKey]}`
-              : ``
+            session.type === 'live'
+              ? `/player/live/${session.vodId}`
+              : `/player/vod/${session.vodId}`
           }
-          disabled={isDisabled}
+          disabled={
+            session.type === 'live' &&
+            data &&
+            data.status !== BroadcastStatus.BROADCASTING
+          }
         >
           <CardMedia
             sx={{ height: 240 }}
-            image={event.circuitImage}
+            image={session.picture ?? event.circuitImage}
             title={event.circuitName}
           />
           <CardContent>
-            <Typography variant="h3">
-              {sessionsDisplayName[sessionKey]}
-            </Typography>
-            <Typography variant="subtitle1">
-              {data && data.status === BroadcastStatus.BROADCASTING ? (
-                <Chip color="error" label="LIVE" />
-              ) : sessionDate instanceof Date ? (
-                <FormattedDate
-                  value={sessionDate}
-                  hour12={false}
-                  hour="numeric"
-                  minute="numeric"
-                  timeZoneName="short"
-                  day="numeric"
-                  month="long"
-                  year="numeric"
-                />
-              ) : sessionDate === "TBD" ? (
-                <Chip color="info" label="To Be Decided" />
-              ) : (
-                <Chip color="warning" label="Cancelled" />
-              )}
-            </Typography>
+            <Typography variant="h3">{session.title}</Typography>
+            {session.type === 'live' ? (
+              <Typography variant="subtitle1">
+                {data && data.status === BroadcastStatus.BROADCASTING ? (
+                  <Chip color="error" label="LIVE" />
+                ) : session.date instanceof Date ? (
+                  <FormattedDate
+                    value={session.date}
+                    hour12={false}
+                    hour="numeric"
+                    minute="numeric"
+                    timeZoneName="short"
+                    day="numeric"
+                    month="long"
+                    year="numeric"
+                  />
+                ) : session.date === 'TBD' ? (
+                  <Chip color="info" label="To Be Decided" />
+                ) : (
+                  <Chip color="warning" label="Cancelled" />
+                )}
+              </Typography> 
+            ) : session.description ? (
+              <Typography variant="subtitle1">{session.description}</Typography>
+            ) : null}
           </CardContent>
         </CardActionArea>
       </Paper>

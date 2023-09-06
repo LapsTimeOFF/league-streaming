@@ -19,9 +19,7 @@ const LivePlayer = () => {
     fluid: true,
     sources: [
       {
-        src: `https://ott.jstt.me/${
-          process.env.NODE_ENV === "production" ? "racingOBC" : "racingDevelopmentOBC"
-        }/streams/${streamId}/${streamId}.mpd`,
+        src: `https://ott.jstt.me/racingOBC/streams/${streamId}/${streamId}.mpd`,
         type: "application/dash+xml",
       },
     ],

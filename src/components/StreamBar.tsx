@@ -1,7 +1,7 @@
-import { Box, Divider, Grid, Paper, Typography } from "@mui/material";
-import React, { FC } from "react";
-import { RaceEvent, SessionsName } from "@/data";
-import StreamCard from "./StreamCard";
+import { Box, Divider, Grid, Paper, Typography } from '@mui/material';
+import React, { FC } from 'react';
+import { RaceEvent, SessionsName } from '@/data';
+import StreamCard from './StreamCard';
 
 type Props = {
   event: RaceEvent;
@@ -26,13 +26,8 @@ const StreamBar: FC<Props> = ({ event }) => {
         }}
       />
       <Grid container spacing={2}>
-        {Object.entries(event.date).map(([key, value]) => (
-          <StreamCard
-            key={key}
-            event={event}
-            sessionKey={key as SessionsName}
-            sessionDate={value}
-          />
+        {event.video?.map((session) => (
+          <StreamCard key={session.vodId} event={event} session={session} />
         ))}
       </Grid>
     </Paper>
