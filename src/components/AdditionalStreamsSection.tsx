@@ -13,18 +13,18 @@ const getEventFromID = (id: string) => {
   let rootObj: RaceEvent | undefined;
 
   for (const raceEvent of raceEvents) {
-    if (raceEvent.video?.live?.session === id) {
-      rootObj = raceEvent;
-      break;
-    }
-    if (raceEvent.video?.live?.qualifying === id) {
-      rootObj = raceEvent;
-      break;
-    }
-    if (raceEvent.video?.live?.race === id) {
-      rootObj = raceEvent;
-      break;
-    }
+    // if (raceEvent.video?.live?.session === id) {
+    //   rootObj = raceEvent;
+    //   break;
+    // }
+    // if (raceEvent.video?.live?.qualifying === id) {
+    //   rootObj = raceEvent;
+    //   break;
+    // }
+    // if (raceEvent.video?.live?.race === id) {
+    //   rootObj = raceEvent;
+    //   break;
+    // }
   }
 
   return rootObj;
