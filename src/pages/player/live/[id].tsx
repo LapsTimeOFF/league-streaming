@@ -1,9 +1,17 @@
 import Player from '@/components/Player';
-import { Container, IconButton, Typography } from '@mui/material';
+import { Button, Container, IconButton, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import React from 'react';
 import Link from 'next/link';
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next/types';
+import {
+  GetStaticPaths,
+  GetStaticProps,
+  InferGetStaticPropsType,
+} from 'next/types';
+import Head from 'next/head';
+import { RaceEvent, raceEvents } from '@/data';
+import IosShareIcon from '@mui/icons-material/IosShare';
+import ReactMarkdown from 'react-markdown';
 
 export interface Broadcasts {
   streamId: string;
@@ -62,9 +70,9 @@ export interface Broadcasts {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const streams = await fetch(
+  const streams = (await fetch(
     'https://ott.jstt.me/racing/rest/v2/broadcasts/list/0/100'
-  ).then((res) => res.json()) as Broadcasts[];
+  ).then((res) => res.json())) as Broadcasts[];
 
   const paths = streams.map((stream) => ({
     params: { id: stream.streamId },
@@ -77,13 +85,34 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps<{
   id: string;
+  data: Broadcasts;
+  localData: string;
 }> = async (context) => {
-  return { props: { id: context.params?.id as string } };
-}; 
+  const data = (await fetch(
+    `https://ott.jstt.me/racing/rest/v2/broadcasts/${context.params?.id}`
+  ).then((res) => res.json())) as Broadcasts;
+
+  const localData = raceEvents.find((event) =>
+    event.video?.find((video) => video.vodId === context.params?.id)
+  );
+
+  return {
+    props: {
+      id: context.params?.id as string,
+      data,
+      localData: JSON.stringify(localData),
+    },
+  };
+};
 
 export default function Page({
   id,
+  data,
+  localData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const newData: RaceEvent = JSON.parse(localData);
+  console.log(newData);
+
   const videoJsOptions = {
     autoplay: true,
     controls: true,
@@ -108,24 +137,59 @@ export default function Page({
   };
 
   return (
-    <Container>
-      <IconButton aria-label="back" LinkComponent={Link} href="/">
-        <ArrowBackIcon
+    <>
+      <Head>
+        <title>
+          {newData.countryFlag} {newData.gpName} - Live
+        </title>
+      </Head>
+      <Container>
+        <IconButton aria-label="back" LinkComponent={Link} href="/">
+          <ArrowBackIcon
+            sx={{
+              color: 'white',
+              m: 2,
+            }}
+          />
+        </IconButton>
+        <Typography
+          variant="h1"
           sx={{
-            color: 'white',
-            m: 2,
+            textAlign: 'center',
           }}
-        />
-      </IconButton>
-      <Typography
-        variant="h1"
-        sx={{
-          textAlign: 'center',
-        }}
-      >
-        Live Player
-      </Typography>
-      <Player options={videoJsOptions} />
-    </Container>
+        >
+          Live Player
+        </Typography>
+        <Typography
+          variant="h2"
+          sx={{
+            textAlign: 'center',
+          }}
+        >
+          {newData.countryFlag} {newData.gpName} - Live
+        </Typography>
+        <Player options={videoJsOptions} />
+        <Button
+          variant="text"
+          startIcon={<IosShareIcon />}
+          sx={{
+            mt: 5,
+          }}
+        >
+          Share
+        </Button>
+        <Typography
+          variant="h4"
+          sx={{
+            mt: 2,
+          }}
+        >
+          <ReactMarkdown>
+            {newData.video?.find((video) => video.vodId === id)
+              ?.descriptionInPlayer ?? ''}
+          </ReactMarkdown>
+        </Typography>
+      </Container>
+    </>
   );
-};
+}

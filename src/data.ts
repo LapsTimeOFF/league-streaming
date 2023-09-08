@@ -14,6 +14,7 @@ export type VideoObject = {
   title: string
   picture?: string
   description?: string
+  descriptionInPlayer?: string
   vodId: string
   type: 'vod' | 'live' | 'extra_content'
   date?: Date | 'TBD'
@@ -121,6 +122,7 @@ export const raceEvents: RaceEvent[] = [
         title: 'Qatar Grand Prix Qualifying',
         type: 'live',
         vodId: 'league-qatar-q',
+        descriptionInPlayer: 'Enjoy the Qualifying of the Qatar Grand Prix! Join us [here](/player/live/league-qatar-r) for the race!',
         date: new Date('2023-09-10T17:00:00.000Z'),
       },
       {
