@@ -106,7 +106,7 @@ export const raceEvents: RaceEvent[] = [
       {
         title: 'Bahrain Grand Prix Qualifying Highlights',
         type: 'extra_content',
-        vodId: '021513788814444859848686',
+        vodId: '962260738552352930628746',
         description: 'Re-watch the best moments of the Bahrain Grand Prix Qualifying!',
       }
     ],
