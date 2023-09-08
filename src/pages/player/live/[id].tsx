@@ -1,5 +1,12 @@
 import Player from '@/components/Player';
-import { Button, Container, IconButton, Typography } from '@mui/material';
+import {
+  Alert,
+  Button,
+  Container,
+  IconButton,
+  Snackbar,
+  Typography,
+} from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import React from 'react';
 import Link from 'next/link';
@@ -112,6 +119,18 @@ export default function Page({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const newData: RaceEvent = JSON.parse(localData);
   console.log(newData);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const videoJsOptions = {
     autoplay: true,
@@ -170,10 +189,14 @@ export default function Page({
         </Typography>
         <Player options={videoJsOptions} />
         <Button
-          variant="text"
+          variant="outlined"
           startIcon={<IosShareIcon />}
           sx={{
             mt: 5,
+          }}
+          onClick={() => {
+            navigator.clipboard.writeText(location.href);
+            setOpen(true);
           }}
         >
           Share
@@ -189,6 +212,16 @@ export default function Page({
               ?.descriptionInPlayer ?? ''}
           </ReactMarkdown>
         </Typography>
+        <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            variant="filled"
+            sx={{ width: '100%', color: 'white' }}
+          >
+            Link copied to clipboard!
+          </Alert>
+        </Snackbar>
       </Container>
     </>
   );
