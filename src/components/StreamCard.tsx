@@ -92,7 +92,7 @@ interface PlayListItemList {
 }
 
 const StreamCard: FC<Props> = ({ event, session }) => {
-  const { data } = useSWR<Broadcast>(
+  const { data, error } = useSWR<Broadcast>(
     session.type === 'live'
       ? `https://ott.jstt.me/racing/rest/v2/broadcasts/${session.vodId}`
       : null,
@@ -107,11 +107,12 @@ const StreamCard: FC<Props> = ({ event, session }) => {
   );
 
   return (
-    <Grid item xs={3} md={3} sx={{
+    <Grid item xs={3} md={6} sx={{
       opacity: data && data.status !== BroadcastStatus.BROADCASTING ? 0.5 : 1,
     }}>
-      <Paper elevation={6}>
+      <Paper elevation={6} sx={{height: '100%'}}>
         <CardActionArea
+          sx={{ height: '100%' }}
           LinkComponent={Link}
           href={
             session.type === 'live'
@@ -121,7 +122,8 @@ const StreamCard: FC<Props> = ({ event, session }) => {
           disabled={
             session.type === 'live' &&
             data &&
-            data.status !== BroadcastStatus.BROADCASTING
+            data.status !== BroadcastStatus.BROADCASTING ||
+            error
           }
         >
           <CardMedia
@@ -155,6 +157,24 @@ const StreamCard: FC<Props> = ({ event, session }) => {
             ) : session.description ? (
               <Typography variant="subtitle1">{session.description}</Typography>
             ) : null}
+            {event.done && (
+              <Chip
+                color="success"
+                label="Finished"
+              />
+            )}
+            {session.type === 'vod' && (
+              <Chip
+                color="info"
+                label="REPLAY"
+              />
+            )}
+            {session.type === "highlights" && (
+              <Chip
+                color="warning"
+                label="HIGHLIGHTS"
+              />
+            )}
           </CardContent>
         </CardActionArea>
       </Paper>
