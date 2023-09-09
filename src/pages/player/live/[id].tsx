@@ -1,4 +1,4 @@
-import Player from '@/components/Player';
+import Player, { useVideoJS } from '@/hooks/useVideoJS';
 import {
   Alert,
   Button,
@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import React from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
 import {
   GetStaticPaths,
@@ -17,6 +17,7 @@ import {
 } from 'next/types';
 import Head from 'next/head';
 import { RaceEvent, raceEvents } from '@/data';
+import PlayerType from 'video.js/dist/types/player';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import ReplyIcon from '@mui/icons-material/Reply';
 import ReactMarkdown from 'react-markdown';
@@ -118,28 +119,6 @@ export default function Page({
   data,
   localData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const newData: RaceEvent = JSON.parse(localData);
-  console.log(newData);
-  const [open, setOpen] = React.useState(false);
-
-  if (!newData)
-    return (
-      <>
-        <Typography variant="h1">Whoopsie! You were not supposed to see that!</Typography>
-      </>
-    );
-
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen(false);
-  };
-
   const videoJsOptions = {
     autoplay: true,
     controls: true,
@@ -161,6 +140,34 @@ export default function Page({
         type: 'application/vnd.apple.mpegurl',
       },
     ],
+  };
+
+  const [open, setOpen] = React.useState(false);
+  const { element: VideoPlayer, playerRef } = useVideoJS({
+    options: videoJsOptions,
+  });
+
+  const newData: RaceEvent = JSON.parse(localData);
+  console.log(newData);
+
+  if (!newData)
+    return (
+      <>
+        <Typography variant="h1">
+          Whoopsie! You were not supposed to see that!
+        </Typography>
+      </>
+    );
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
   };
 
   return (
@@ -195,12 +202,13 @@ export default function Page({
         >
           {newData.countryFlag} {newData.gpName} - Live
         </Typography>
-        <Player options={videoJsOptions} />
+        {VideoPlayer}
         <Button
           variant="outlined"
           startIcon={<IosShareIcon />}
           sx={{
             mt: 5,
+            mx: 1,
           }}
           onClick={() => {
             navigator.clipboard.writeText(location.href);
@@ -208,6 +216,24 @@ export default function Page({
           }}
         >
           Share
+        </Button>
+        <Button
+          variant="outlined"
+          startIcon={<ReplyIcon />}
+          sx={{
+            mt: 5,
+            mx: 1,
+          }}
+          onClick={() => {
+            location.href = `https://muvi.gg/go/app/play/https://ott.jstt.me/racing/streams/${id}/${id}.mpd`;
+            if (playerRef.current) {
+              // Check if the player reference is available
+              const player = playerRef.current;
+              player.pause(); // Pause the player
+            }
+          }}
+        >
+          Open in MultiViewer
         </Button>
         <Typography
           variant="h4"

@@ -1,11 +1,14 @@
-import Player from '@/components/Player';
-import { Box, Container, IconButton, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
+import { Button, Container, IconButton, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import React, { use, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import useSWR from 'swr';
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next/types';
+import {
+  GetStaticPaths,
+  GetStaticProps,
+  InferGetStaticPropsType,
+} from 'next/types';
+import IosShareIcon from '@mui/icons-material/IosShare';
+import ReplyIcon from '@mui/icons-material/Reply';
 
 interface VOD {
   streamName: string;
@@ -42,7 +45,7 @@ export const getStaticProps: GetStaticProps<{
   ).then((res) => res.json())) as VOD;
 
   return { props: { id: vod } };
-}; 
+};
 
 export default function Page({
   id,
@@ -82,6 +85,34 @@ export default function Page({
           width: '100%',
         }}
       />
+      <Button
+        variant="outlined"
+        startIcon={<IosShareIcon />}
+        sx={{
+          mt: 5,
+        }}
+        onClick={() => {
+          navigator.clipboard.writeText(location.href);
+        }}
+      >
+        Share
+      </Button>
+      <Button
+        variant="outlined"
+        startIcon={<ReplyIcon />}
+        sx={{
+          mt: 5,
+          mx: 1,
+        }}
+        onClick={() => {
+          location.href = `https://muvi.gg/go/app/play/https://ott.jstt.me/racing/${id.filePath}`;
+          if (videoPlayer.current) {
+            videoPlayer.current.pause();
+          }
+        }}
+      >
+        Open in MultiViewer
+      </Button>
     </Container>
   );
-};
+}
