@@ -42,7 +42,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16"
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
       - name: Setup Bun
         # You may pin to the exact commit or the version.
         # uses: oven-sh/setup-bun@4573031972107e0af692492ee967d9022deafd7b
