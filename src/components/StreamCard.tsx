@@ -12,6 +12,7 @@ import { RaceEvent, SessionsName, VideoObject } from '@/data';
 import { FormattedDate } from 'react-intl';
 import useSWR from 'swr';
 import Link from 'next/link';
+import DateFormat from './DateFormat';
 
 type Props = {
   event: RaceEvent;
@@ -138,16 +139,7 @@ const StreamCard: FC<Props> = ({ event, session }) => {
                 {data && data.status === BroadcastStatus.BROADCASTING ? (
                   <Chip color="error" label="LIVE" />
                 ) : session.date instanceof Date ? (
-                  <FormattedDate
-                    value={session.date}
-                    hour12={false}
-                    hour="numeric"
-                    minute="numeric"
-                    timeZoneName="short"
-                    day="numeric"
-                    month="long"
-                    year="numeric"
-                  />
+                  <DateFormat date={session.date} />
                 ) : session.date === 'TBD' ? (
                   <Chip color="info" label="To Be Decided" />
                 ) : (
@@ -166,13 +158,19 @@ const StreamCard: FC<Props> = ({ event, session }) => {
             {session.type === 'vod' && (
               <Chip
                 color="info"
-                label="REPLAY"
+                label="Full Replay"
               />
             )}
             {session.type === "highlights" && (
               <Chip
                 color="warning"
-                label="HIGHLIGHTS"
+                label="Highlights"
+              />
+            )}
+            {session.type === "extra_content" && (
+              <Chip
+                color="secondary"
+                label="Extra Content"
               />
             )}
           </CardContent>

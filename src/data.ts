@@ -16,7 +16,7 @@ export type VideoObject = {
   description?: string
   descriptionInPlayer?: string
   vodId: string
-  type: 'vod' | 'live' | 'highlights'
+  type: 'vod' | 'live' | 'highlights' | 'extra_content'
   date?: Date | 'TBD'
 }
 
@@ -59,7 +59,7 @@ export const raceEvents: RaceEvent[] = [
       {
         title: 'Pre-Season Testing - Race',
         type: 'live',
-        vodId: 'league-pre-season-q',
+        vodId: 'league-pre-season-r',
         date: new Date('2023-08-20T17:15:00.000Z')
       },
     ],
