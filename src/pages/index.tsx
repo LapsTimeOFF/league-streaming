@@ -8,7 +8,7 @@ import Image from "next/image";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const smallScreen = useMediaQuery("(max-width:800px)");
+  const smallScreen = useMediaQuery("(max-width:900px)");
 
   return (
     <>
@@ -92,7 +92,7 @@ export default function Home() {
             fontSize: 15,
           }}
         >
-          Copyright 2023 - F1 Twitter Refugees
+          © Copyright 2023 - F1 Twitter Refugees
         </Typography>
       </Box>
     </>

@@ -16,7 +16,7 @@ export type VideoObject = {
   description?: string
   descriptionInPlayer?: string
   vodId: string
-  type: 'vod' | 'live' | 'extra_content'
+  type: 'vod' | 'live' | 'highlights'
   date?: Date | 'TBD'
 }
 
@@ -51,13 +51,13 @@ export const raceEvents: RaceEvent[] = [
       'This session is for testing purposes, principal systems, including telemetry and broadcasting will be tested, drivers will be driving on the Paul Ricard track. This session **will not** affect the championship. The qualification will have the classic format, but, the race will be aborted after a few laps. Please make sure to always keep an eye on the Discord for any action given by the Race Control.',
     video: [
       {
-        title: 'Pre-Season Testing Qualifying',
+        title: 'Pre-Season Testing - Qualifying',
         type: 'live',
         vodId: 'league-pre-season-q',
         date: new Date('2023-08-20T17:00:00.000Z')
       },
       {
-        title: 'Pre-Season Testing Race',
+        title: 'Pre-Season Testing - Race',
         type: 'live',
         vodId: 'league-pre-season-q',
         date: new Date('2023-08-20T17:15:00.000Z')
@@ -83,30 +83,18 @@ export const raceEvents: RaceEvent[] = [
       //   race: 'f5xVJqq1oPGbH8I2gGvYF26w'
       // }
       {
-        title: 'Bahrain Grand Prix Qualifying',
-        type: 'live',
-        vodId: 'league-bahrain-q',
-        date: new Date('2023-09-02T17:00:00.000Z'),
-      },
-      {
-        title: 'Bahrain Grand Prix Race',
-        type: 'live',
-        vodId: 'league-bahrain-r',
-        date: new Date('2023-09-02T17:20:00.000Z'),
-      },
-      {
-        title: 'Bahrain Grand Prix Qualifying Replay',
+        title: 'Bahrain Grand Prix - Qualifying',
         type: 'vod',
         vodId: '9v2XmZaHaYWU70ImPD18k6h5',
       },
       {
-        title: 'Bahrain Grand Prix Race Replay',
+        title: 'Bahrain Grand Prix - Race',
         type: 'vod',
         vodId: 'f5xVJqq1oPGbH8I2gGvYF26w',
       },
       {
-        title: 'Bahrain Grand Prix Qualifying Highlights',
-        type: 'extra_content',
+        title: 'Bahrain Grand Prix - Qualifying',
+        type: 'highlights',
         vodId: '962260738552352930628746',
         description: 'Re-watch the best moments of the Bahrain Grand Prix Qualifying!',
       }
@@ -119,14 +107,14 @@ export const raceEvents: RaceEvent[] = [
     countryFlag: '🇶🇦',
     video: [
       {
-        title: 'Qatar Grand Prix Qualifying',
+        title: 'Qatar Grand Prix - Qualifying',
         type: 'live',
         vodId: 'league-qatar-q',
         descriptionInPlayer: 'Enjoy the Qualifying of the Qatar Grand Prix! Join us [here](/player/live/league-qatar-r) for the race!',
         date: new Date('2023-09-10T17:00:00.000Z'),
       },
       {
-        title: 'Qatar Grand Prix Race',
+        title: 'Qatar Grand Prix - Race',
         type: 'live',
         vodId: 'league-qatar-r',
         date: new Date('2023-09-10T17:20:00.000Z'),
