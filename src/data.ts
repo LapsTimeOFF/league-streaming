@@ -65,7 +65,6 @@ export const raceEvents: RaceEvent[] = [
     ],
   },
   {
-
     done: false,
     gpName: 'Bahrain Grand Prix',
     countryName: 'Bahrain',

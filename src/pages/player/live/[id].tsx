@@ -108,7 +108,7 @@ export const getStaticProps: GetStaticProps<{
     props: {
       id: context.params?.id as string,
       data,
-      localData: JSON.stringify(localData),
+      localData: JSON.stringify(localData ?? null),
     },
   };
 };
@@ -121,6 +121,13 @@ export default function Page({
   const newData: RaceEvent = JSON.parse(localData);
   console.log(newData);
   const [open, setOpen] = React.useState(false);
+
+  if (!newData)
+    return (
+      <>
+        <Typography variant="h1">Whoopsie! You were not supposed to see that!</Typography>
+      </>
+    );
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
