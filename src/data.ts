@@ -107,16 +107,15 @@ export const raceEvents: RaceEvent[] = [
     video: [
       {
         title: 'Qatar Grand Prix - Qualifying',
-        type: 'live',
-        vodId: 'league-qatar-q',
-        descriptionInPlayer: 'Enjoy the Qualifying of the Qatar Grand Prix! Join us [here](/player/live/league-qatar-r) for the race!',
-        date: new Date('2023-09-10T17:00:00.000Z'),
+        type: 'vod',
+        vodId: '029815972710639251432417',
+        description: "Enjoy once more the qualifying of the Qatar Grand Prix!",
       },
       {
         title: 'Qatar Grand Prix - Race',
-        type: 'live',
-        vodId: 'league-qatar-r',
-        date: new Date('2023-09-10T17:20:00.000Z'),
+        type: 'vod',
+        vodId: 'bI2HZMbOZwHN8XArvYFuSZ9v',
+        description: "Enjoy once more the race of the Qatar Grand Prix!",
       }
     ],
     circuitName: 'Losail International Circuit',
