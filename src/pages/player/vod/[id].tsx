@@ -1,14 +1,16 @@
 import { Button, Container, IconButton, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import React, { useEffect, useRef } from 'react';
+import { raceEvents } from "@/data";
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   GetStaticPaths,
   GetStaticProps,
   InferGetStaticPropsType,
 } from 'next/types';
-import IosShareIcon from '@mui/icons-material/IosShare';
-import ReplyIcon from '@mui/icons-material/Reply';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import mvlogo from '@/assets/multiviewer-logo.png';
 
 interface VOD {
   streamName: string;
@@ -23,6 +25,7 @@ interface VOD {
   type: string;
   previewFilePath: null;
 }
+
 export const getStaticPaths: GetStaticPaths = async () => {
   const streams = (await fetch(
     'https://ott.jstt.me/racing/rest/v2/vods/list/0/100'
@@ -51,6 +54,8 @@ export default function Page({
   id,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const videoPlayer = useRef<null | HTMLVideoElement>(null);
+  const currentGP = raceEvents.find((event) => event.video?.find((video) => video?.vodId === id.vodId));
+  const currentVideo = currentGP?.video?.find((video) => video?.vodId === id.vodId);
 
   useEffect(() => {
     console.log(id);
@@ -70,12 +75,13 @@ export default function Page({
         />
       </IconButton>
       <Typography
-        variant="h1"
+        variant="h2"
         sx={{
           textAlign: 'center',
+          mb: 2,
         }}
       >
-        VOD Player
+         {currentGP?.countryFlag} {currentVideo?.title} {currentVideo?.type === 'highlights' ? 'Highlights' : undefined}
       </Typography>
       <video
         ref={videoPlayer}
@@ -87,21 +93,20 @@ export default function Page({
       />
       <Button
         variant="outlined"
-        startIcon={<IosShareIcon />}
+        startIcon={<ContentCopy />}
         sx={{
-          mt: 5,
+          mt: 2,
         }}
         onClick={() => {
           navigator.clipboard.writeText(location.href);
         }}
       >
-        Share
+        Copy Link
       </Button>
       <Button
         variant="outlined"
-        startIcon={<ReplyIcon />}
         sx={{
-          mt: 5,
+          mt: 2,
           mx: 1,
         }}
         onClick={() => {
@@ -111,6 +116,15 @@ export default function Page({
           }
         }}
       >
+        <Image
+          src={mvlogo}
+          alt='MultiViewer Logo'
+          style={{
+            width: '20px',
+            height: '20px',
+            marginRight: '5px',
+          }}
+        />
         Open in MultiViewer
       </Button>
     </Container>

@@ -7,9 +7,8 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import React, { FC, useEffect } from 'react';
-import { RaceEvent, SessionsName, VideoObject } from '@/data';
-import { FormattedDate } from 'react-intl';
+import React, { FC } from 'react';
+import { RaceEvent, VideoObject } from '@/data';
 import useSWR from 'swr';
 import Link from 'next/link';
 import DateFormat from './DateFormat';
@@ -24,12 +23,6 @@ enum BroadcastStatus {
   BROADCASTING = 'broadcasting',
   FINISHED = 'finished',
 }
-
-const sessionsDisplayName: { [key in SessionsName]: string } = {
-  qualifying: 'Qualifying',
-  race: 'Race',
-  session: 'Session',
-};
 
 interface Broadcast {
   streamId: string;
