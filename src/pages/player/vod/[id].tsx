@@ -1,14 +1,19 @@
 import { Button, Container, IconButton, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { raceEvents } from '@/data';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   GetStaticPaths,
   GetStaticProps,
   InferGetStaticPropsType,
 } from 'next/types';
-import IosShareIcon from '@mui/icons-material/IosShare';
-import ReplyIcon from '@mui/icons-material/Reply';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import mvlogo from '@/assets/multiviewer-logo.png';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 interface VOD {
   streamName: string;
@@ -23,6 +28,7 @@ interface VOD {
   type: string;
   previewFilePath: null;
 }
+
 export const getStaticPaths: GetStaticPaths = async () => {
   const streams = (await fetch(
     'https://ott.jstt.me/racing/rest/v2/vods/list/0/100'
@@ -50,69 +56,137 @@ export const getStaticProps: GetStaticProps<{
 export default function Page({
   id,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const router = useRouter();
   const videoPlayer = useRef<null | HTMLVideoElement>(null);
+  const [fullscreen, setFullscreen] = useState(false);
+  const currentGP = raceEvents.find((event) =>
+    event.video?.find((video) => video?.vodId === id.vodId)
+  );
+  const currentVideo = currentGP?.video?.find(
+    (video) => video?.vodId === id.vodId
+  );
 
   useEffect(() => {
     console.log(id);
     if (id) {
       videoPlayer.current!.src = `https://ott.jstt.me/racing/${id.filePath}`;
     }
-  }, [id]);
+    if (router.query.t) {
+      videoPlayer.current!.currentTime = Number(router.query.t);
+    }
+    if (currentVideo?.startTimestamp) {
+      videoPlayer.current!.currentTime = currentVideo.startTimestamp;
+    }
+  }, [id, router.query.t, currentVideo?.startTimestamp]);
+
+  useHotkeys('f', () => {
+    if (videoPlayer.current) {
+      if (fullscreen) {
+        document.exitFullscreen();
+      } else {
+        videoPlayer.current.requestFullscreen();
+      }
+      setFullscreen((prev) => !prev);
+    }
+  });
 
   return (
-    <Container>
-      <IconButton aria-label="back" LinkComponent={Link} href="/">
-        <ArrowBackIcon
+    <>
+      <Head>
+        <title>
+          {currentGP?.countryFlag} {currentVideo?.title}{' '}
+          {currentVideo?.type === 'highlights' ? 'Highlights' : undefined}
+        </title>
+        <meta
+          name="title"
+          content={`${currentGP?.countryFlag} ${currentVideo?.title} - Replay`}
+        />
+        <meta name="description" content={currentVideo?.description} />
+        <meta
+          property="og:image"
+          content={currentVideo?.picture ?? currentGP?.circuitImage}
+        />
+        {/* <meta property="og:type" content="image" /> */}
+      </Head>
+      <Container>
+        <IconButton aria-label="back" LinkComponent={Link} href="/">
+          <ArrowBackIcon
+            sx={{
+              color: 'white',
+              m: 2,
+            }}
+          />
+        </IconButton>
+        <Typography
+          variant="h2"
           sx={{
-            color: 'white',
-            m: 2,
+            textAlign: 'center',
+            mb: 2,
+          }}
+        >
+          {currentGP?.countryFlag} {currentVideo?.title}{' '}
+          {currentVideo?.type === 'highlights' ? 'Highlights' : undefined}
+        </Typography>
+        <video
+          ref={videoPlayer}
+          controls
+          autoPlay
+          style={{
+            width: '100%',
           }}
         />
-      </IconButton>
-      <Typography
-        variant="h1"
-        sx={{
-          textAlign: 'center',
-        }}
-      >
-        VOD Player
-      </Typography>
-      <video
-        ref={videoPlayer}
-        controls
-        autoPlay
-        style={{
-          width: '100%',
-        }}
-      />
-      <Button
-        variant="outlined"
-        startIcon={<IosShareIcon />}
-        sx={{
-          mt: 5,
-        }}
-        onClick={() => {
-          navigator.clipboard.writeText(location.href);
-        }}
-      >
-        Share
-      </Button>
-      <Button
-        variant="outlined"
-        startIcon={<ReplyIcon />}
-        sx={{
-          mt: 5,
-          mx: 1,
-        }}
-        onClick={() => {
-          location.href = `https://muvi.gg/go/app/play/https://ott.jstt.me/racing/${id.filePath}`;
-          if (videoPlayer.current) {
-            videoPlayer.current.pause();
-          }
-        }}
-      >
-        Open in MultiViewer
-      </Button>
-    </Container>
+        <Button
+          variant="outlined"
+          startIcon={<ContentCopy />}
+          sx={{
+            mt: 2,
+          }}
+          onClick={() => {
+            navigator.clipboard.writeText(location.href);
+          }}
+        >
+          Copy Link
+        </Button>
+        <Button
+          variant="outlined"
+          startIcon={<ContentCopy />}
+          sx={{
+            mt: 2,
+          }}
+          onClick={() => {
+            navigator.clipboard.writeText(
+              location.href +
+                `?t=${Math.floor(videoPlayer.current?.currentTime ?? 0)}`
+            );
+          }}
+        >
+          Copy Link at this timestamp
+        </Button>
+        <Button
+          variant="outlined"
+          sx={{
+            mt: 2,
+            mx: 1,
+          }}
+          onClick={() => {
+            location.href = `https://muvi.gg/go/app/play/https://ott.jstt.me/racing/${id.filePath}`;
+            if (videoPlayer.current) {
+              videoPlayer.current.pause();
+            }
+          }}
+        >
+          <Image
+            src={mvlogo}
+            alt="MultiViewer Logo"
+            style={{
+              width: '20px',
+              height: '20px',
+              marginRight: '5px',
+            }}
+          />
+          Open in MultiViewer
+        </Button>
+      </Container>
+    </>
   );
 }

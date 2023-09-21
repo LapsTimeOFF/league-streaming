@@ -18,6 +18,7 @@ export type VideoObject = {
   vodId: string
   type: 'vod' | 'live' | 'highlights' | 'extra_content'
   date?: Date | 'TBD'
+  startTimestamp?: number
 }
 
 export type SessionResult = {
@@ -90,6 +91,7 @@ export const raceEvents: RaceEvent[] = [
         title: 'Bahrain Grand Prix - Race',
         type: 'vod',
         vodId: 'f5xVJqq1oPGbH8I2gGvYF26w',
+        picture: "https://test-cdn.lapstime.fr/u/46pTcO.png"
       },
       {
         title: 'Bahrain Grand Prix - Qualifying',
@@ -107,21 +109,44 @@ export const raceEvents: RaceEvent[] = [
     video: [
       {
         title: 'Qatar Grand Prix - Qualifying',
-        type: 'live',
-        vodId: 'league-qatar-q',
-        descriptionInPlayer: 'Enjoy the Qualifying of the Qatar Grand Prix! Join us [here](/player/live/league-qatar-r) for the race!',
-        date: new Date('2023-09-10T17:00:00.000Z'),
+        type: 'vod',
+        vodId: '029815972710639251432417',
+        description: "Enjoy once more the qualifying of the Qatar Grand Prix!",
       },
       {
         title: 'Qatar Grand Prix - Race',
-        type: 'live',
-        vodId: 'league-qatar-r',
-        date: new Date('2023-09-10T17:20:00.000Z'),
+        type: 'vod',
+        vodId: 'bI2HZMbOZwHN8XArvYFuSZ9v',
+        description: "Enjoy once more the race of the Qatar Grand Prix!",
+        startTimestamp: 600
       }
     ],
     circuitName: 'Losail International Circuit',
     circuitImage:
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi0.wp.com%2Fmetropolitanmagazine.it%2Fwp-content%2Fuploads%2F2019%2F03%2F2014-wsbk-qatar-promo-circuit_full.jpg&f=1&nofb=1&ipt=914300f4425574154216f737ac01efa8cb24e1b9909512eb62a2083d9d895535&ipo=images',
+  },
+  {
+    done: false,
+    gpName: 'Abu Dhabi Grand Prix',
+    countryName: 'United Arab Emirates',
+    countryFlag: '🇦🇪',
+    video: [
+      {
+        title: 'Abu Dhabi Grand Prix - Qualifying',
+        type: 'live',
+        vodId: 'league-abu-dhabi-q',
+        date: "TBD"
+      },
+      {
+        title: 'Abu Dhabi Grand Prix - Race',
+        type: 'live',
+        vodId: 'league-abu-dhabi-r',
+        date: "TBD"
+      },
+    ],
+    circuitName: 'Yas Marina Circuit',
+    circuitImage:
+      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.timeoutabudhabi.com%2Fpublic%2Fimages%2F2020%2F07%2F01%2Fyas-marina-circuit-drive-in-cinema.jpg&f=1&nofb=1&ipt=5f522eae0ce65da4f84b9e7b824ece88f91ba3774fe84a1c319bc74fe74ae73f&ipo=images',
   },
   // {
 
@@ -134,6 +159,7 @@ export const raceEvents: RaceEvent[] = [
   //   circuitImage:
   //     'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F2c%2Fd3%2Fce%2F2cd3ced4e5a8afa063b1a4bf18161cc4.jpg&f=1&nofb=1&ipt=c07ac3239a6341aea52b6c3431ecc2b22fbc822552011e20b417f0d775c8c6c4&ipo=images',
   // },
+  
   // {
 
   //   done: false,

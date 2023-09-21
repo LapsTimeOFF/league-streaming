@@ -1,4 +1,4 @@
-import Player, { useVideoJS } from '@/hooks/useVideoJS';
+import { useVideoJS } from '@/hooks/useVideoJS';
 import {
   Alert,
   Button,
@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import React, { useRef } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import {
   GetStaticPaths,
@@ -16,10 +16,10 @@ import {
   InferGetStaticPropsType,
 } from 'next/types';
 import Head from 'next/head';
+import Image from 'next/image';
 import { RaceEvent, raceEvents } from '@/data';
-import PlayerType from 'video.js/dist/types/player';
-import IosShareIcon from '@mui/icons-material/IosShare';
-import ReplyIcon from '@mui/icons-material/Reply';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import mvlogo from '@/assets/multiviewer-logo.png';
 import ReactMarkdown from 'react-markdown';
 
 export interface Broadcasts {
@@ -176,6 +176,14 @@ export default function Page({
         <title>
           {newData.countryFlag} {newData.gpName} - Live
         </title>
+        <meta
+          name="title"
+          content={`${newData.countryFlag} ${newData.gpName} - Live`}
+        />
+        <meta
+          name="description"
+          content={newData.video?.find((r) => r.vodId === id)?.description}
+        />
       </Head>
       <Container>
         <IconButton aria-label="back" LinkComponent={Link} href="/">
@@ -187,17 +195,10 @@ export default function Page({
           />
         </IconButton>
         <Typography
-          variant="h1"
-          sx={{
-            textAlign: 'center',
-          }}
-        >
-          Live Player
-        </Typography>
-        <Typography
           variant="h2"
           sx={{
             textAlign: 'center',
+            mb: 2,
           }}
         >
           {newData.countryFlag} {newData.gpName} - Live
@@ -205,23 +206,21 @@ export default function Page({
         {VideoPlayer}
         <Button
           variant="outlined"
-          startIcon={<IosShareIcon />}
+          startIcon={<ContentCopy />}
           sx={{
-            mt: 5,
-            mx: 1,
+            mt: 2,
           }}
           onClick={() => {
             navigator.clipboard.writeText(location.href);
             setOpen(true);
           }}
         >
-          Share
+          Copy Link
         </Button>
         <Button
           variant="outlined"
-          startIcon={<ReplyIcon />}
           sx={{
-            mt: 5,
+            mt: 2,
             mx: 1,
           }}
           onClick={() => {
@@ -233,6 +232,15 @@ export default function Page({
             }
           }}
         >
+          <Image
+            src={mvlogo}
+            alt="MultiViewer Logo"
+            style={{
+              width: '20px',
+              height: '20px',
+              marginRight: '5px',
+            }}
+          />
           Open in MultiViewer
         </Button>
         <Typography

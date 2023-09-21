@@ -7,9 +7,8 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import React, { FC, useEffect } from 'react';
-import { RaceEvent, SessionsName, VideoObject } from '@/data';
-import { FormattedDate } from 'react-intl';
+import React, { FC } from 'react';
+import { RaceEvent, VideoObject } from '@/data';
 import useSWR from 'swr';
 import Link from 'next/link';
 import DateFormat from './DateFormat';
@@ -24,12 +23,6 @@ enum BroadcastStatus {
   BROADCASTING = 'broadcasting',
   FINISHED = 'finished',
 }
-
-const sessionsDisplayName: { [key in SessionsName]: string } = {
-  qualifying: 'Qualifying',
-  race: 'Race',
-  session: 'Session',
-};
 
 interface Broadcast {
   streamId: string;
@@ -133,7 +126,7 @@ const StreamCard: FC<Props> = ({ event, session }) => {
             title={event.circuitName}
           />
           <CardContent>
-            <Typography variant="h3">{session.title}</Typography>
+            <Typography variant="h4">{session.title}</Typography>
             {session.type === 'live' ? (
               <Typography variant="subtitle1">
                 {data && data.status === BroadcastStatus.BROADCASTING ? (

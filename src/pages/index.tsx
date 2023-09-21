@@ -1,14 +1,14 @@
-import Head from "next/head";
-import { Inter } from "next/font/google";
-import { Box, Typography, Divider, useMediaQuery } from "@mui/material";
-import UpcomingEvents from "@/components/UpcomingEvents";
-import React from "react";
-import Image from "next/image";
+import Head from 'next/head';
+import { Inter } from 'next/font/google';
+import { Box, Typography, Divider, useMediaQuery } from '@mui/material';
+import UpcomingEvents from '@/components/UpcomingEvents';
+import React from 'react';
+import Image from 'next/image';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-  const smallScreen = useMediaQuery("(max-width:900px)");
+  const smallScreen = useMediaQuery('(max-width:900px)');
 
   return (
     <>
@@ -22,15 +22,16 @@ export default function Home() {
       </Head>
       <Box
         sx={{
-          position: "sticky",
+          position: 'sticky',
           top: 0,
-          backgroundColor: "#121212",
+          backgroundColor: '#121212',
           zIndex: 100,
           mb: 4,
-          flexDirection: "row",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          mt: smallScreen ? undefined : 2,
+          flexDirection: 'row',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <Image
@@ -46,14 +47,14 @@ export default function Home() {
           }}
         />
         <Typography
-          variant={smallScreen ? "h6" : "h1"}
+          variant={smallScreen ? 'h6' : 'h2'}
           sx={{
             fontFamily: inter,
             ml: 2,
-            color: "white",
+            color: 'white',
           }}
         >
-          League Streaming Platform
+          <b>League Streaming Platform</b>
         </Typography>
         <Divider
           sx={{
@@ -64,13 +65,13 @@ export default function Home() {
       </Box>
 
       <Typography
-        variant="h2"
-        sx={{ fontFamily: inter, textAlign: "center", mb: 1 }}
+        variant="h4"
+        sx={{ fontFamily: inter, textAlign: 'center', mb: 1 }}
       >
         Season 1 - F1 Twitter Refugees League
       </Typography>
 
-      <Divider/>
+      <Divider />
 
       <UpcomingEvents font={inter} />
       <Box
@@ -78,17 +79,17 @@ export default function Home() {
           bottom: 0,
           zIndex: 100,
           mb: 4,
-          flexDirection: "row",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          flexDirection: 'row',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <Typography
           sx={{
             fontFamily: inter,
             ml: 3,
-            color: "gray",
+            color: 'gray',
             fontSize: 15,
           }}
         >
