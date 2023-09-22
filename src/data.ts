@@ -11,15 +11,15 @@ export type RaceEvent = {
 };
 
 export type VideoObject = {
-  title: string
-  picture?: string
-  description?: string
-  descriptionInPlayer?: string
-  vodId: string
-  type: 'vod' | 'live' | 'highlights' | 'extra_content'
-  date?: Date | 'TBD'
-  startTimestamp?: number
-}
+  title: string;
+  picture?: string;
+  description?: string;
+  descriptionInPlayer?: string;
+  vodId: string;
+  type: 'vod' | 'live' | 'highlights' | 'extra_content';
+  date?: Date | 'TBD';
+  startTimestamp?: number;
+};
 
 export type SessionResult = {
   time: string;
@@ -40,7 +40,6 @@ export type AdditionalStream = {
 
 export const raceEvents: RaceEvent[] = [
   {
-
     done: true,
     gpName: 'Pre-Season Testing',
     countryName: 'France',
@@ -55,13 +54,13 @@ export const raceEvents: RaceEvent[] = [
         title: 'Pre-Season Testing - Qualifying',
         type: 'live',
         vodId: 'league-pre-season-q',
-        date: new Date('2023-08-20T17:00:00.000Z')
+        date: new Date('2023-08-20T17:00:00.000Z'),
       },
       {
         title: 'Pre-Season Testing - Race',
         type: 'live',
         vodId: 'league-pre-season-r',
-        date: new Date('2023-08-20T17:15:00.000Z')
+        date: new Date('2023-08-20T17:15:00.000Z'),
       },
     ],
   },
@@ -91,14 +90,15 @@ export const raceEvents: RaceEvent[] = [
         title: 'Bahrain Grand Prix - Race',
         type: 'vod',
         vodId: 'f5xVJqq1oPGbH8I2gGvYF26w',
-        picture: "https://test-cdn.lapstime.fr/u/46pTcO.png"
+        picture: 'https://test-cdn.lapstime.fr/u/46pTcO.png',
       },
       {
         title: 'Bahrain Grand Prix - Qualifying',
         type: 'highlights',
         vodId: '962260738552352930628746',
-        description: 'Re-watch the best moments of the Bahrain Grand Prix Qualifying!',
-      }
+        description:
+          'Re-watch the best moments of the Bahrain Grand Prix Qualifying!',
+      },
     ],
   },
   {
@@ -111,15 +111,15 @@ export const raceEvents: RaceEvent[] = [
         title: 'Qatar Grand Prix - Qualifying',
         type: 'vod',
         vodId: '029815972710639251432417',
-        description: "Enjoy once more the qualifying of the Qatar Grand Prix!",
+        description: 'Enjoy once more the qualifying of the Qatar Grand Prix!',
       },
       {
         title: 'Qatar Grand Prix - Race',
         type: 'vod',
         vodId: 'bI2HZMbOZwHN8XArvYFuSZ9v',
-        description: "Enjoy once more the race of the Qatar Grand Prix!",
-        startTimestamp: 600
-      }
+        description: 'Enjoy once more the race of the Qatar Grand Prix!',
+        startTimestamp: 600,
+      },
     ],
     circuitName: 'Losail International Circuit',
     circuitImage:
@@ -135,13 +135,13 @@ export const raceEvents: RaceEvent[] = [
         title: 'Abu Dhabi Grand Prix - Qualifying',
         type: 'live',
         vodId: 'league-abu-dhabi-q',
-        date: "TBD"
+        date: new Date('2023-09-24T17:00:00.000Z'),
       },
       {
         title: 'Abu Dhabi Grand Prix - Race',
         type: 'live',
         vodId: 'league-abu-dhabi-r',
-        date: "TBD"
+        date: new Date('2023-09-24T17:25:00.000Z'),
       },
     ],
     circuitName: 'Yas Marina Circuit',
@@ -159,7 +159,7 @@ export const raceEvents: RaceEvent[] = [
   //   circuitImage:
   //     'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F2c%2Fd3%2Fce%2F2cd3ced4e5a8afa063b1a4bf18161cc4.jpg&f=1&nofb=1&ipt=c07ac3239a6341aea52b6c3431ecc2b22fbc822552011e20b417f0d775c8c6c4&ipo=images',
   // },
-  
+
   // {
 
   //   done: false,

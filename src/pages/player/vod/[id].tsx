@@ -71,11 +71,11 @@ export default function Page({
     if (id) {
       videoPlayer.current!.src = `https://ott.jstt.me/racing/${id.filePath}`;
     }
-    if (router.query.t) {
-      videoPlayer.current!.currentTime = Number(router.query.t);
-    }
     if (currentVideo?.startTimestamp) {
       videoPlayer.current!.currentTime = currentVideo.startTimestamp;
+    }
+    if (router.query.t) {
+      videoPlayer.current!.currentTime = Number(router.query.t);
     }
   }, [id, router.query.t, currentVideo?.startTimestamp]);
 
