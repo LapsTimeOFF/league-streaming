@@ -105,9 +105,9 @@ const StreamCard: FC<Props> = ({ event, session }) => {
               : `/player/vod/${session.vodId}`
           }
           disabled={
-            session.type === 'live' ||
-            (session.type === 'additional_live_stream' &&
-              session.status === 'offline')
+            (session.type === 'live' ||
+            session.type === 'additional_live_stream') &&
+              session.status === 'offline'
           }
         >
           <CardMedia
