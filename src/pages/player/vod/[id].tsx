@@ -13,12 +13,12 @@ import mvlogo from '@/assets/multiviewer-logo.png';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { ResultsCodes, RaceEvent, VideoObject } from '@/types';
+import { ResultsCodes, RaceEvent, VideoObject, API_URL } from '@/types';
 import useVideoJS from '@/hooks/useVideoJS';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const streams = (await fetch('https://api.f1refugeesleague.tech/api/v1/events').then(
-    (res) => res.json()
+  const streams = (await fetch(`${API_URL}/api/v1/events`).then((res) =>
+    res.json()
   )) as { code: ResultsCodes; result: RaceEvent[] };
 
   const paths = streams.result.flatMap(
@@ -55,8 +55,8 @@ export const getStaticProps: GetStaticProps<{
   currentVideo: VideoObject;
   currentGP: RaceEvent;
 }> = async (context) => {
-  const events = (await fetch('https://api.f1refugeesleague.tech/api/v1/events').then(
-    (res) => res.json()
+  const events = (await fetch(`${API_URL}/api/v1/events`).then((res) =>
+    res.json()
   )) as { code: ResultsCodes; result: RaceEvent[] };
 
   const currentGP = events.result.find((event) =>
@@ -64,11 +64,11 @@ export const getStaticProps: GetStaticProps<{
   )!;
 
   console.log(
-    `https://api.f1refugeesleague.tech/api/v1/videos/?eventId=${currentGP.id}&videoId=${context.params?.id}`
+    `${API_URL}/api/v1/videos/?eventId=${currentGP.id}&videoId=${context.params?.id}`
   );
 
   const currentVideo = (await fetch(
-    `https://api.f1refugeesleague.tech/api/v1/videos/?eventId=${currentGP.id}&videoId=${context.params?.id}`
+    `${API_URL}/api/v1/videos/?eventId=${currentGP.id}&videoId=${context.params?.id}`
   ).then((res) => res.json())) as { code: ResultsCodes; results: VideoObject };
 
   console.log(context.params, currentVideo);
@@ -169,6 +169,15 @@ export default function Page({
           {currentVideo?.type === 'highlights' ? 'Highlights' : undefined}
         </Typography>
         {VideoPlayer}
+        <Typography
+          variant="h4"
+          sx={{
+            textAlign: 'center',
+            mb: 2,
+          }}
+        >
+          {currentVideo?.descriptionInPlayer}
+        </Typography>
         <Button
           variant="outlined"
           startIcon={<ContentCopy />}

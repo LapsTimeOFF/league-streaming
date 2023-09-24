@@ -3,7 +3,7 @@ import { NextFont } from 'next/dist/compiled/@next/font';
 import React, { FC, useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { JSONTree } from 'react-json-tree';
-import { RaceEvent, ResultsCodes } from '@/types';
+import { API_URL, RaceEvent, ResultsCodes } from '@/types';
 import StreamBar from './StreamBar';
 import useSWR from 'swr';
 
@@ -18,8 +18,7 @@ const UpcomingEvents: FC<Props> = ({ font }) => {
     code: ResultsCodes;
     result: RaceEvent[];
   }>(
-    // 'https://api.f1refugeesleague.tech/api/v1/events',
-    'https://api.f1refugeesleague.tech/api/v1/events',
+    `${API_URL}/api/v1/events`,
     async (url) => {
       const data = await fetch(url).then((res) => res.json());
       console.log(data);

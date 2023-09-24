@@ -17,7 +17,7 @@ import {
 } from 'next/types';
 import Head from 'next/head';
 import Image from 'next/image';
-import { RaceEvent, ResultsCodes, VideoObject } from '@/types';
+import { API_URL, RaceEvent, ResultsCodes, VideoObject } from '@/types';
 import ContentCopy from '@mui/icons-material/ContentCopy';
 import mvlogo from '@/assets/multiviewer-logo.png';
 import ReactMarkdown from 'react-markdown';
@@ -79,7 +79,7 @@ export interface Broadcasts {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const streams = (await fetch('https://api.f1refugeesleague.tech/api/v1/events').then(
+  const streams = (await fetch(`${API_URL}/api/v1/events`).then(
     (res) => res.json()
   )) as { code: ResultsCodes; result: RaceEvent[] };
 
@@ -105,7 +105,7 @@ export const getStaticProps: GetStaticProps<{
   data: VideoObject;
   localData: RaceEvent;
 }> = async (context) => {
-  const events = (await fetch('https://api.f1refugeesleague.tech/api/v1/events').then(
+  const events = (await fetch(`${API_URL}/api/v1/events`).then(
     (res) => res.json()
   )) as { code: ResultsCodes; result: RaceEvent[] };
 
@@ -115,11 +115,11 @@ export const getStaticProps: GetStaticProps<{
 
   console.log(
     context.params,
-    `https://api.f1refugeesleague.tech/api/v1/videos?eventId=${localData.id}&videoId=${context.params?.id}`
+    `${API_URL}/api/v1/videos?eventId=${localData.id}&videoId=${context.params?.id}`
   );
 
   const data = (await fetch(
-    `https://api.f1refugeesleague.tech/api/v1/videos/?eventId=${localData.id}&videoId=${context.params?.id}`
+    `${API_URL}/api/v1/videos/?eventId=${localData.id}&videoId=${context.params?.id}`
   ).then((res) => res.json())) as VideoObject;
 
   console.log(context.params);

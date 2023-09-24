@@ -40,3 +40,5 @@ export enum ResultsCodes {
   EventNotFound = 'EVENT_NOT_FOUND',
   StreamNotFound = 'STREAM_NOT_FOUND',
 }
+
+export const API_URL = process.env.NODE_ENV === 'development' ? "http://127.0.0.1:8787" : "https://api.f1refugeesleague.tech"
