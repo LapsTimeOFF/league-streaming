@@ -1,7 +1,6 @@
 import { Button, Container, IconButton, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import React, { useEffect, useRef, useState } from 'react';
-import { raceEvents } from '@/data';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -14,81 +13,123 @@ import mvlogo from '@/assets/multiviewer-logo.png';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useHotkeys } from 'react-hotkeys-hook';
-
-interface VOD {
-  streamName: string;
-  vodName: string;
-  streamId: string;
-  creationDate: number;
-  startTime: number;
-  duration: number;
-  fileSize: number;
-  filePath: string;
-  vodId: string;
-  type: string;
-  previewFilePath: null;
-}
+import { ResultsCodes, RaceEvent, VideoObject } from '@/types';
+import useVideoJS from '@/hooks/useVideoJS';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const streams = (await fetch(
-    'https://ott.jstt.me/racing/rest/v2/vods/list/0/100'
-  ).then((res) => res.json())) as VOD[];
+  const streams = (await fetch('https://api.f1refugeesleague.tech/api/v1/events').then(
+    (res) => res.json()
+  )) as { code: ResultsCodes; result: RaceEvent[] };
 
-  const paths = streams.map((stream) => ({
-    params: { id: stream.vodId },
-  }));
+  const paths = streams.result.flatMap(
+    (stream) =>
+      stream.video
+        ?.filter(
+          (r) => r.type !== 'live' && r.type !== 'additional_live_stream'
+        )
+        .map((video) => ({
+          params: { id: video.vodId },
+        })) ?? []
+  );
+
+  console.log(paths);
+
   return {
     paths,
     fallback: false, // false or "blocking"
   };
 };
 
-export const getStaticProps: GetStaticProps<{
-  id: VOD;
-}> = async (context) => {
-  const vod = (await fetch(
-    `https://ott.jstt.me/racing/rest/v2/vods/${context.params?.id}`
-  ).then((res) => res.json())) as VOD;
+// export const getStaticProps: GetStaticProps<{
+//   id: VOD;
+// }> = async (context) => {
+//   const vod = (await fetch(
+//     `https://ott.jstt.me/racing/rest/v2/vods/${context.params?.id}`
+//   ).then((res) => res.json())) as VOD;
 
-  return { props: { id: vod } };
+//   return { props: { id: vod } };
+// };
+
+export const getStaticProps: GetStaticProps<{
+  id: string;
+  currentVideo: VideoObject;
+  currentGP: RaceEvent;
+}> = async (context) => {
+  const events = (await fetch('https://api.f1refugeesleague.tech/api/v1/events').then(
+    (res) => res.json()
+  )) as { code: ResultsCodes; result: RaceEvent[] };
+
+  const currentGP = events.result.find((event) =>
+    event.video?.find((video) => video.vodId === context.params?.id)
+  )!;
+
+  console.log(
+    `https://api.f1refugeesleague.tech/api/v1/videos/?eventId=${currentGP.id}&videoId=${context.params?.id}`
+  );
+
+  const currentVideo = (await fetch(
+    `https://api.f1refugeesleague.tech/api/v1/videos/?eventId=${currentGP.id}&videoId=${context.params?.id}`
+  ).then((res) => res.json())) as { code: ResultsCodes; results: VideoObject };
+
+  console.log(context.params, currentVideo);
+
+  return {
+    props: {
+      id: context.params?.id as string,
+      currentVideo: currentVideo.results,
+      currentGP,
+    },
+  };
 };
 
 export default function Page({
   id,
+  currentGP,
+  currentVideo,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const router = useRouter();
-  const videoPlayer = useRef<null | HTMLVideoElement>(null);
   const [fullscreen, setFullscreen] = useState(false);
-  const currentGP = raceEvents.find((event) =>
-    event.video?.find((video) => video?.vodId === id.vodId)
-  );
-  const currentVideo = currentGP?.video?.find(
-    (video) => video?.vodId === id.vodId
-  );
+  const videoJsOptions = {
+    autoplay: true,
+    controls: true,
+    responsive: true,
+    fluid: true,
+    sources: [
+      {
+        src: `https://flussonic.jstt.me/league-vods/${id}.mp4/index.mpd`,
+        type: 'application/dash+xml',
+      },
+      {
+        src: `https://flussonic.jstt.me/league-vods/${id}.mp4/index.m3u8`,
+        type: 'application/vnd.apple.mpegurl',
+      },
+    ],
+  };
+  const { element: VideoPlayer, playerRef } = useVideoJS({
+    options: videoJsOptions,
+  });
 
   useEffect(() => {
-    console.log(id);
-    if (id) {
-      videoPlayer.current!.src = `https://ott.jstt.me/racing/${id.filePath}`;
-    }
     if (currentVideo?.startTimestamp) {
-      videoPlayer.current!.currentTime = currentVideo.startTimestamp;
+      playerRef.current!.currentTime(currentVideo.startTimestamp);
     }
     if (router.query.t) {
-      videoPlayer.current!.currentTime = Number(router.query.t);
+      playerRef.current!.currentTime(Number(router.query.t));
     }
-  }, [id, router.query.t, currentVideo?.startTimestamp]);
+  }, [router.query.t, currentVideo?.startTimestamp, playerRef]);
 
   useHotkeys('f', () => {
-    if (videoPlayer.current) {
+    if (playerRef.current) {
       if (fullscreen) {
         document.exitFullscreen();
       } else {
-        videoPlayer.current.requestFullscreen();
+        playerRef.current.requestFullscreen();
       }
       setFullscreen((prev) => !prev);
     }
   });
+
+  console.log(currentGP, currentVideo);
 
   return (
     <>
@@ -127,14 +168,7 @@ export default function Page({
           {currentGP?.countryFlag} {currentVideo?.title}{' '}
           {currentVideo?.type === 'highlights' ? 'Highlights' : undefined}
         </Typography>
-        <video
-          ref={videoPlayer}
-          controls
-          autoPlay
-          style={{
-            width: '100%',
-          }}
-        />
+        {VideoPlayer}
         <Button
           variant="outlined"
           startIcon={<ContentCopy />}
@@ -156,7 +190,7 @@ export default function Page({
           onClick={() => {
             navigator.clipboard.writeText(
               location.href +
-                `?t=${Math.floor(videoPlayer.current?.currentTime ?? 0)}`
+                `?t=${Math.floor(playerRef.current?.currentTime() ?? 0)}`
             );
           }}
         >
@@ -169,9 +203,9 @@ export default function Page({
             mx: 1,
           }}
           onClick={() => {
-            location.href = `https://muvi.gg/go/app/play/https://ott.jstt.me/racing/${id.filePath}`;
-            if (videoPlayer.current) {
-              videoPlayer.current.pause();
+            location.href = `https://muvi.gg/go/app/play/https://flussonic.jstt.me/${id}.mp4/index.mpd`;
+            if (playerRef.current) {
+              playerRef.current.pause();
             }
           }}
         >

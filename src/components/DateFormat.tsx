@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react';
 import { FormattedDate } from 'react-intl';
 
 type Props = {
-  date: Date | undefined;
+  date: Date | string | undefined;
 };
 
 const DateFormat: FC<Props> = ({ date }) => {

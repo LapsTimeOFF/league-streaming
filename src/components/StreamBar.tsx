@@ -1,6 +1,6 @@
 import { Box, Chip, Divider, Grid, Paper, Typography, useMediaQuery } from '@mui/material';
 import React, { FC } from 'react';
-import { RaceEvent } from '@/data';
+import { RaceEvent } from '@/types';
 import StreamCard from './StreamCard';
 
 type Props = {

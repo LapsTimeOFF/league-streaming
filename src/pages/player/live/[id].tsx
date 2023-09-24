@@ -17,7 +17,7 @@ import {
 } from 'next/types';
 import Head from 'next/head';
 import Image from 'next/image';
-import { RaceEvent, raceEvents } from '@/data';
+import { RaceEvent, ResultsCodes, VideoObject } from '@/types';
 import ContentCopy from '@mui/icons-material/ContentCopy';
 import mvlogo from '@/assets/multiviewer-logo.png';
 import ReactMarkdown from 'react-markdown';
@@ -79,13 +79,21 @@ export interface Broadcasts {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const streams = (await fetch(
-    'https://ott.jstt.me/racing/rest/v2/broadcasts/list/0/100'
-  ).then((res) => res.json())) as Broadcasts[];
+  const streams = (await fetch('https://api.f1refugeesleague.tech/api/v1/events').then(
+    (res) => res.json()
+  )) as { code: ResultsCodes; result: RaceEvent[] };
 
-  const paths = streams.map((stream) => ({
-    params: { id: stream.streamId },
-  }));
+  const paths = streams.result.flatMap(
+    (stream) =>
+      stream.video
+        ?.filter(
+          (r) => r.type === 'live' || r.type === 'additional_live_stream'
+        )
+        .map((video) => ({
+          params: { id: video.vodId },
+        })) ?? []
+  );
+
   return {
     paths,
     fallback: false, // false or "blocking"
@@ -94,22 +102,33 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps<{
   id: string;
-  data: Broadcasts;
-  localData: string;
+  data: VideoObject;
+  localData: RaceEvent;
 }> = async (context) => {
-  const data = (await fetch(
-    `https://ott.jstt.me/racing/rest/v2/broadcasts/${context.params?.id}`
-  ).then((res) => res.json())) as Broadcasts;
+  const events = (await fetch('https://api.f1refugeesleague.tech/api/v1/events').then(
+    (res) => res.json()
+  )) as { code: ResultsCodes; result: RaceEvent[] };
 
-  const localData = raceEvents.find((event) =>
+  const localData = events.result.find((event) =>
     event.video?.find((video) => video.vodId === context.params?.id)
+  )!;
+
+  console.log(
+    context.params,
+    `https://api.f1refugeesleague.tech/api/v1/videos?eventId=${localData.id}&videoId=${context.params?.id}`
   );
+
+  const data = (await fetch(
+    `https://api.f1refugeesleague.tech/api/v1/videos/?eventId=${localData.id}&videoId=${context.params?.id}`
+  ).then((res) => res.json())) as VideoObject;
+
+  console.log(context.params);
 
   return {
     props: {
       id: context.params?.id as string,
       data,
-      localData: JSON.stringify(localData ?? null),
+      localData: localData,
     },
   };
 };
@@ -126,17 +145,11 @@ export default function Page({
     fluid: true,
     sources: [
       {
-        src: `https://ott.jstt.me/racing/streams/${id}/${id}.mpd`,
-        // src: `https://ott.jstt.me/${
-        //   process.env.NODE_ENV === "production" ? "racing" : "racingDevelopment"
-        // }/streams/${streamId}/${streamId}.mpd`,
+        src: `https://flussonic.jstt.me/${id}/index.mpd`,
         type: 'application/dash+xml',
       },
       {
-        src: `https://ott.jstt.me/racing/streams/${id}.m3u8`,
-        // src: `https://ott.jstt.me/${
-        //   process.env.NODE_ENV === "production" ? "racing" : "racingDevelopment"
-        // }/streams/${streamId}/${streamId}.mpd`,
+        src: `https://flussonic.jstt.me/${id}/index.m3u8`,
         type: 'application/vnd.apple.mpegurl',
       },
     ],
@@ -147,10 +160,9 @@ export default function Page({
     options: videoJsOptions,
   });
 
-  const newData: RaceEvent = JSON.parse(localData);
-  console.log(newData);
+  console.log(localData);
 
-  if (!newData)
+  if (!localData)
     return (
       <>
         <Typography variant="h1">
@@ -174,15 +186,15 @@ export default function Page({
     <>
       <Head>
         <title>
-          {newData.countryFlag} {newData.gpName} - Live
+          {localData.countryFlag} {localData.gpName} - Live
         </title>
         <meta
           name="title"
-          content={`${newData.countryFlag} ${newData.gpName} - Live`}
+          content={`${localData.countryFlag} ${localData.gpName} - Live`}
         />
         <meta
           name="description"
-          content={newData.video?.find((r) => r.vodId === id)?.description}
+          content={localData.video?.find((r) => r.vodId === id)?.description}
         />
       </Head>
       <Container>
@@ -201,7 +213,7 @@ export default function Page({
             mb: 2,
           }}
         >
-          {newData.countryFlag} {newData.gpName} - Live
+          {localData.countryFlag} {localData.gpName} - Live
         </Typography>
         {VideoPlayer}
         <Button
@@ -250,7 +262,7 @@ export default function Page({
           }}
         >
           <ReactMarkdown>
-            {newData.video?.find((video) => video.vodId === id)
+            {localData.video?.find((video) => video.vodId === id)
               ?.descriptionInPlayer ?? ''}
           </ReactMarkdown>
         </Typography>

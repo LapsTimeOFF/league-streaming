@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { FC } from 'react';
-import { RaceEvent, VideoObject } from '@/data';
+import { RaceEvent, VideoObject } from '@/types';
 import useSWR from 'swr';
 import Link from 'next/link';
 import DateFormat from './DateFormat';
@@ -86,38 +86,28 @@ interface PlayListItemList {
 }
 
 const StreamCard: FC<Props> = ({ event, session }) => {
-  const { data, error } = useSWR<Broadcast>(
-    session.type === 'live'
-      ? `https://ott.jstt.me/racing/rest/v2/broadcasts/${session.vodId}`
-      : null,
-    async (url: string) => {
-      if (url === null) return Promise.resolve(null);
-
-      const data = await fetch(url).then((res) => res.json());
-
-      return data;
-    },
-    { refreshInterval: 5000 }
-  );
-
   return (
-    <Grid item xs={3} md={6} sx={{
-      opacity: data && data.status !== BroadcastStatus.BROADCASTING ? 0.5 : 1,
-    }}>
-      <Paper elevation={6} sx={{height: '100%'}}>
+    <Grid
+      item
+      xs={3}
+      md={6}
+      sx={{
+        opacity: session.status === 'offline' ? 0.5 : 1,
+      }}
+    >
+      <Paper elevation={6} sx={{ height: '100%' }}>
         <CardActionArea
           sx={{ height: '100%' }}
           LinkComponent={Link}
           href={
-            session.type === 'live'
+            session.type === 'live' || session.type === 'additional_live_stream'
               ? `/player/live/${session.vodId}`
               : `/player/vod/${session.vodId}`
           }
           disabled={
-            session.type === 'live' &&
-            data &&
-            data.status !== BroadcastStatus.BROADCASTING ||
-            error
+            session.type === 'live' ||
+            (session.type === 'additional_live_stream' &&
+              session.status === 'offline')
           }
         >
           <CardMedia
@@ -127,44 +117,31 @@ const StreamCard: FC<Props> = ({ event, session }) => {
           />
           <CardContent>
             <Typography variant="h4">{session.title}</Typography>
-            {session.type === 'live' ? (
+            {session.type === 'live' ||
+            session.type === 'additional_live_stream' ? (
               <Typography variant="subtitle1">
-                {data && data.status === BroadcastStatus.BROADCASTING ? (
+                {session.status === 'live' ? (
                   <Chip color="error" label="LIVE" />
-                ) : session.date instanceof Date ? (
-                  <DateFormat date={session.date} />
                 ) : session.date === 'TBD' ? (
                   <Chip color="info" label="To Be Decided" />
-                ) : (
+                ) : session.date === 'Cancelled' ? (
                   <Chip color="warning" label="Cancelled" />
+                ) : (
+                  <DateFormat date={session.date ?? ''} />
                 )}
-              </Typography> 
+              </Typography>
             ) : session.description ? (
               <Typography variant="subtitle1">{session.description}</Typography>
             ) : null}
-            {event.done && (
-              <Chip
-                color="success"
-                label="Finished"
-              />
-            )}
+            {event.done && <Chip color="success" label="Finished" />}
             {session.type === 'vod' && (
-              <Chip
-                color="info"
-                label="Full Replay"
-              />
+              <Chip color="info" label="Full Replay" />
             )}
-            {session.type === "highlights" && (
-              <Chip
-                color="warning"
-                label="Highlights"
-              />
+            {session.type === 'highlights' && (
+              <Chip color="warning" label="Highlights" />
             )}
-            {session.type === "extra_content" && (
-              <Chip
-                color="secondary"
-                label="Extra Content"
-              />
+            {session.type === 'extra_content' && (
+              <Chip color="secondary" label="Extra Content" />
             )}
           </CardContent>
         </CardActionArea>
