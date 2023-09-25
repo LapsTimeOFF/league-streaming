@@ -106,8 +106,8 @@ const StreamCard: FC<Props> = ({ event, session }) => {
           }
           disabled={
             (session.type === 'live' ||
-            session.type === 'additional_live_stream') &&
-              session.status === 'offline'
+              session.type === 'additional_live_stream') &&
+            session.status === 'offline'
           }
         >
           <CardMedia
@@ -117,6 +117,9 @@ const StreamCard: FC<Props> = ({ event, session }) => {
           />
           <CardContent>
             <Typography variant="h4">{session.title}</Typography>
+            {session.description ? (
+              <Typography variant="subtitle1">{session.description}</Typography>
+            ) : null}
             {session.type === 'live' ||
             session.type === 'additional_live_stream' ? (
               <Typography variant="subtitle1">
@@ -130,8 +133,6 @@ const StreamCard: FC<Props> = ({ event, session }) => {
                   <DateFormat date={session.date ?? ''} />
                 )}
               </Typography>
-            ) : session.description ? (
-              <Typography variant="subtitle1">{session.description}</Typography>
             ) : null}
             {event.done && <Chip color="success" label="Finished" />}
             {session.type === 'vod' && (
