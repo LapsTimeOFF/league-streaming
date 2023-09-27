@@ -135,12 +135,11 @@ export default function Page({
     <>
       <Head>
         <title>
-          {currentGP?.countryFlag} {currentVideo?.title}{' '}
-          {currentVideo?.type === 'highlights' ? 'Highlights' : undefined}
+          {currentGP?.countryFlag} {currentGP.gpName} {currentVideo?.title}
         </title>
         <meta
           name="title"
-          content={`${currentGP?.countryFlag} ${currentVideo?.title} - Replay`}
+          content={`${currentGP?.countryFlag} ${currentGP.gpName} ${currentVideo?.title} - Replay`}
         />
         <meta name="description" content={currentVideo?.description} />
         <meta
@@ -159,13 +158,13 @@ export default function Page({
           />
         </IconButton>
         <Typography
-          variant="h2"
+          variant="h4"
           sx={{
             textAlign: 'center',
             mb: 2,
           }}
         >
-          {currentGP?.countryFlag} {currentVideo?.title}
+          {currentGP?.countryFlag} {currentGP.gpName} - {currentVideo?.title}
         </Typography>
         {VideoPlayer}
         <Typography
