@@ -211,7 +211,7 @@ export default function Page({
             mx: 1,
           }}
           onClick={() => {
-            location.href = `https://muvi.gg/go/app/play/https://flussonic.jstt.me/${id}.mp4/index.mpd`;
+            location.href = `https://muvi.gg/go/app/play/https://flussonic.jstt.me/league-vods/${id}.mp4/index.mpd`;
             if (playerRef.current) {
               playerRef.current.pause();
             }

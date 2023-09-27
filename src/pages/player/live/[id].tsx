@@ -236,7 +236,7 @@ export default function Page({
             mx: 1,
           }}
           onClick={() => {
-            location.href = `https://muvi.gg/go/app/play/https://ott.jstt.me/racing/streams/${id}/${id}.mpd`;
+            location.href = `https://muvi.gg/go/app/play/https://flussonic.jstt.me/${id}/index.mpd`;
             if (playerRef.current) {
               // Check if the player reference is available
               const player = playerRef.current;
