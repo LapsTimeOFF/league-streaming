@@ -165,8 +165,7 @@ export default function Page({
             mb: 2,
           }}
         >
-          {currentGP?.countryFlag} {currentVideo?.title}{' '}
-          {currentVideo?.type === 'highlights' ? 'Highlights' : undefined}
+          {currentGP?.countryFlag} {currentVideo?.title}
         </Typography>
         {VideoPlayer}
         <Typography
